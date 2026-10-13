@@ -23,13 +23,28 @@ even blank or invalid input consumed a turn.
 
 ## 2. How did you use AI as a teammate?
 
-To be completed during the repair phase.
+I used OpenAI Codex to trace the relationship between the Streamlit event flow
+in `app.py` and the pure functions planned for `logic_utils.py`. Its useful
+suggestion was to validate input before incrementing the attempt counter; I
+accepted that change and verified it with parameterized tests for blank,
+non-numeric, decimal, negative, and oversized input. I did not accept the idea
+of keeping `check_guess` as a tuple-returning UI helper because the starter
+tests expected a single outcome string and mixing messages with comparison
+logic made the function harder to reuse. Instead, I separated
+`check_guess` from `get_outcome_message` and verified both independently.
 
 ---
 
 ## 3. Debugging and testing your fixes
 
-To be completed after the automated and manual verification steps.
+I treated a bug as fixed only when the code-level cause was removed and a test
+captured the expected behavior. The main parameterized comparison test checks
+winning, too-high, and too-low guesses, while a second test checks that each
+outcome points in the correct direction. Codex helped enumerate edge cases for
+`parse_guess`; those cases showed that decimal text, blank input, values outside
+the active range, and very large values now fail cleanly without entering the
+game logic. I also checked that wrong guesses use the same score penalty and
+that the score cannot become negative.
 
 ---
 
