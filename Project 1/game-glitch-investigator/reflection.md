@@ -1,4 +1,4 @@
-# 💭 Reflection: Game Glitch Investigator
+# 💭 Project 1 Reflection: Game Glitch Investigator
 
 ## 1. What was broken when you started?
 

@@ -1,16 +1,17 @@
-# AI Interactions Log
+# Project 1 AI Interactions Log
 
 ## Agent Workflow
 
 **What task did you give the agent?**
 
-I asked OpenAI Codex to inspect the CodePath Week 3 assignment and official
-starter, reproduce the bugs from the code, repair the Streamlit game, add
-automated tests, complete the documentation, and make phase-based Git commits.
+I asked OpenAI Codex to inspect the CodePath Project 1 assignment from Week 3
+and its official starter, reproduce the bugs from the code, repair the
+Streamlit game, add automated tests, complete the documentation, and make
+phase-based Git commits.
 
 **What did the agent do?**
 
-- Added the official starter structure under `Week 3/game-glitch-investigator`.
+- Added the official starter structure under `Project 1/game-glitch-investigator`.
 - Connected four visible symptoms to their code-level causes.
 - Moved game rules from `app.py` into `logic_utils.py`.
 - Repaired comparison, validation, scoring, difficulty, and reset behavior.

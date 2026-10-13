@@ -1,4 +1,4 @@
-"""Pure game rules for the Game Glitch Investigator project."""
+"""Pure game rules for Project 1: Game Glitch Investigator."""
 
 from typing import Optional
 

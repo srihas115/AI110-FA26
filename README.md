@@ -4,4 +4,4 @@ Coursework for CodePath's Foundations of AI Engineering course.
 
 ## Projects
 
-- [Week 3: Game Glitch Investigator](Week%203/game-glitch-investigator/README.md)
+- [Project 1: Game Glitch Investigator](Project%201/game-glitch-investigator/README.md)

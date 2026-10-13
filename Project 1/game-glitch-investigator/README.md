@@ -1,10 +1,10 @@
-# 🎮 Game Glitch Investigator
+# 🎮 Project 1: Game Glitch Investigator
 
-A repaired Streamlit number-guessing game built for CodePath AI110. The starter
-intentionally mixed interface code with game rules and included broken hints,
-unstable comparisons, inconsistent scoring, and incomplete session resets. The
-finished project separates the rules into testable functions and keeps the UI
-state predictable across Streamlit reruns.
+Project 1 for CodePath AI110 is a repaired Streamlit number-guessing game. The
+starter intentionally mixed interface code with game rules and included broken
+hints, unstable comparisons, inconsistent scoring, and incomplete session
+resets. The finished Project 1 submission separates the rules into testable
+functions and keeps the UI state predictable across Streamlit reruns.
 
 ## Features
 

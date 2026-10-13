@@ -1,4 +1,4 @@
-"""Automated verification for the repaired game rules."""
+"""Automated verification for Project 1's repaired game rules."""
 
 import pytest
 

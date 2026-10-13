@@ -26,10 +26,10 @@ def reset_game(difficulty: str) -> None:
     st.session_state.active_difficulty = difficulty
 
 
-st.set_page_config(page_title="Game Glitch Investigator", page_icon="🎮")
+st.set_page_config(page_title="Project 1: Game Glitch Investigator", page_icon="🎮")
 
-st.title("🎮 Game Glitch Investigator")
-st.caption("A repaired number-guessing game with testable core logic.")
+st.title("🎮 Project 1: Game Glitch Investigator")
+st.caption("CodePath AI110 Project 1 — a repaired game with testable core logic.")
 
 st.sidebar.header("Settings")
 difficulty = st.sidebar.selectbox(
