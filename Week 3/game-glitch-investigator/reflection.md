@@ -50,10 +50,23 @@ that the score cannot become negative.
 
 ## 4. What did you learn about Streamlit and state?
 
-To be completed after the repair.
+Streamlit reruns the Python file from top to bottom whenever a widget causes an
+interaction, so ordinary local variables should not be treated as durable game
+state. `st.session_state` acts like a per-user backpack that survives those
+reruns and stores the secret, attempts, score, status, and history. I also
+learned that related state must reset together; changing only the secret and
+attempt count can leave a supposedly new game stuck in an old won or lost
+status.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-To be completed after the repair.
+I want to keep reproducing bugs in a small table before changing code, because
+the trigger, symptom, and suspected location made each fix easier to verify. I
+also want to keep pure logic outside framework files so automated tests do not
+need to simulate the full interface. Next time I work with AI, I will state the
+existing API contract and success tests earlier so the first proposal stays
+within scope. This project changed my view of AI-generated code: a plausible
+implementation is a draft that still needs human review, focused tests, and
+verification against actual behavior.
