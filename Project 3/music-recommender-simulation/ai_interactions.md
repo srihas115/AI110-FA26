@@ -1,43 +1,40 @@
 # AI Interactions Log
 
-> **Stretch features only.** Only fill in the sections that apply to stretch features you attempted. If you did not attempt a stretch feature, leave its section blank or delete it. This file is not required for the core project.
-
----
-
-## Agentic Workflow (SF8)
-
-> Document your experience using an AI agent (e.g., Cursor Agent, Claude, Copilot) to make multi-step changes autonomously.
+## Agentic Workflow
 
 **What task did you give the agent?**
 
-<!-- Describe the goal you asked the agent to accomplish -->
+I asked Codex to finish Project 3 from the saved CodePath assignment page, use the official Music Recommender Simulation starter, make meaningful commits, verify the result, and prepare the repository subfolder for submission.
 
-**Prompts used:**
+**Prompts used**
 
-<!-- Paste the key prompts you gave the agent -->
+- Finish Project 3 using the saved CodePath Project 3 instructions.
+- Delete the downloaded assignment HTML and companion files only after the implementation is complete, and never commit them.
 
 **What did the agent generate or change?**
 
-<!-- List the files edited, code generated, or commands run -->
+- Imported the official starter into `Project 3/music-recommender-simulation` without its Git history.
+- Expanded the catalog from 10 to 18 fictional songs across more genres and moods.
+- Implemented typed CSV loading, weighted scoring, per-feature reasons, deterministic top-k ranking, and an object-oriented wrapper.
+- Added balanced, genre-first, mood-first, and energy-focused scoring strategies.
+- Added a CLI evaluation for four profiles, including one conflicting edge case.
+- Replaced the starter tests with 14 tests covering loading, scoring, ranking, explanations, modes, invalid inputs, and edge cases.
+- Completed the README, model card, experiment, bias analysis, and personal reflection.
 
 **What did you verify or fix manually?**
 
-<!-- Describe anything the agent got wrong or that required human review -->
+I checked that every displayed score equals the sum of its explanation, that numeric CSV fields are converted before math, and that ties have deterministic ordering. I ran all four profiles, compared balanced and energy-focused rankings, reviewed the adversarial profile's surprising result, and ran the full automated suite plus Python compilation. I also verified that the downloaded course page remained untracked throughout development.
 
----
-
-## Design Pattern (SF10)
-
-> Document how AI helped you choose or implement a design pattern.
+## Design Pattern
 
 **Which design pattern did you use?**
 
-<!-- e.g., Strategy, Factory, Observer, etc. -->
+A lightweight Strategy pattern for scoring modes.
 
 **How did AI help you brainstorm or implement it?**
 
-<!-- Describe the conversation or suggestions that led to your decision -->
+AI proposed keeping one scoring pipeline and storing named weight dictionaries instead of duplicating separate ranking functions. This makes the experiment repeatable and keeps explanations consistent across modes.
 
-**How does the pattern appear in your final code?**
+**How does the pattern appear in the final code?**
 
-<!-- Point to the relevant class or method -->
+`SCORING_MODES` defines each strategy. `score_song()` and `recommend_songs()` accept a mode name, and the `Recommender` class stores the selected mode. The same catalog can therefore be ranked with different priorities while using one tested implementation.

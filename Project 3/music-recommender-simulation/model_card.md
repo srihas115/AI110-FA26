@@ -1,111 +1,77 @@
-# 🎧 Model Card: Music Recommender Simulation
+# Model Card: VibeMap 1.0
 
-## 1. Model Name  
+## 1. Model Name
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+**VibeMap 1.0**
 
----
+## 2. Goal, Intended Use, and Non-Intended Use
 
-## 2. Intended Use  
+VibeMap predicts which songs in a small catalog best match a stated taste profile. It is designed for students exploring how content-based ranking turns features into recommendations. It assumes the listener can describe a preferred genre, mood, and energy level, with optional numeric preferences.
 
-Describe what your recommender is designed to do and who it is for. 
+This is a classroom simulation, not a production model. It should not be used to make high-stakes decisions, infer sensitive traits, judge artists, or claim to represent a person's full taste. Scores are relative matches inside this catalog, not universal quality ratings.
 
-Prompts:  
+## 3. Data Used
 
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+The local CSV contains 18 fictional songs. Ten came from the starter catalog and eight were added to improve variety. Its columns are ID, title, artist, genre, mood, energy, tempo, valence, danceability, and acousticness.
 
----
+The expanded rows add Latin, classical, hip hop, folk, EDM, R&B, and metal examples. The data is still small: most categories contain only one or two tracks, labels are subjective, and it contains no lyrics, language, release date, popularity, listening behavior, or real user feedback. It is not a representative sample of music or listeners.
 
-## 3. How the Model Works  
+## 4. Algorithm Summary
 
-Explain your scoring approach in simple language.  
+VibeMap uses content-based filtering. In balanced mode, an exact genre match earns 2 points and an exact mood match earns 1.5 points. Energy earns up to 1.5 points based on how close the song is to the target. Optional tempo, valence, danceability, and acousticness preferences each earn up to 0.5 similarity points.
 
-Prompts:  
+Every song is scored independently. The program sorts the catalog by total score and returns the top five. Each result lists the factors that added points. Ties use title and ID so repeated runs are stable.
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
+Three additional strategies change the feature weights: genre-first, mood-first, and energy-focused. They reuse the same scoring pipeline. This strategy-style design makes experiments easy to repeat without changing the algorithm by hand.
 
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+## 5. Strengths and Observed Behavior
 
----
+VibeMap works best when the requested genre and mood both exist in the catalog. It gave intuitive first choices for three focused profiles: `Sunrise City` for high-energy happy pop, `Library Rain` for chill lofi, and `Storm Runner` for intense rock. The explanations correctly reveal which exact matches and numeric similarities produced those rankings.
 
-## 4. Data  
+It also handles a profile with no perfect song instead of failing. For the conflicted sad-workout profile, it presents the tradeoff between an energetic EDM match and a sad mood match. The deterministic rules and tests make every result reproducible.
 
-Describe the dataset the model uses.  
+## 6. Limitations and Bias
 
-Prompts:  
+The biggest weakness is sparse representation. A category with one song can appear to be the only valid expression of that genre, while lofi and pop have several chances to rank. That can over-favor represented genres and make unfamiliar preferences collapse into energy-only matches.
 
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+Exact labels also create artificial boundaries: the system treats `happy` and `euphoric` as unrelated even though a listener may view them as similar. Fixed weights can create a filter bubble because a selected genre receives a large bonus on every run. Numeric similarity ignores context, so a high-energy euphoric track can rank for a sad workout request. The catalog and weights reflect their creator's choices, not ground truth about musical taste.
 
----
+## 7. Evaluation Process
 
-## 5. Strengths  
+I ran the top-five ranking for four profiles:
 
-Where does your system seem to work well  
+- **High-Energy Pop:** pop, happy, energy 0.85, danceability 0.85.
+- **Chill Lofi:** lofi, chill, energy 0.35, acousticness 0.80.
+- **Deep Intense Rock:** rock, intense, energy 0.92, tempo 145 BPM.
+- **Conflicted Sad Workout:** EDM, sad, energy 0.95, valence 0.20.
 
-Prompts:  
+The first three test clear, internally consistent tastes. The fourth is adversarial because the small catalog has no sad EDM track. I checked whether top songs matched my intuition, whether the explanation added up to the displayed score, and whether profiles produced meaningfully different rankings.
 
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+Pairwise comparisons:
 
----
+- Pop versus lofi: pop favors energetic, danceable songs; lofi moves low-energy acoustic tracks to the top.
+- Pop versus rock: both favor energy, but genre and mood send one toward happy pop and the other toward intense guitars.
+- Pop versus conflicted: `Sunrise City` loses its exact matches, while high-energy EDM and sad rock become stronger.
+- Lofi versus rock: their target energies are almost opposites, so calm acoustic tracks give way to fast, intense tracks.
+- Lofi versus conflicted: the low-energy/acoustic targets reverse into very high energy and low valence, producing almost entirely different top fives.
+- Rock versus conflicted: both like high energy, so several songs overlap, but rock/intense puts `Storm Runner` first while EDM/sad splits its top two between `Electric Bloom` and `Static Hearts`.
 
-## 6. Limitations and Bias 
+The biggest surprise was the conflicted profile. Balanced mode ranked `Electric Bloom` first because genre and energy outweighed its emotional mismatch. This demonstrates why a high score is not the same as a correct recommendation.
 
-Where the system struggles or behaves unfairly. 
+### Weight-Shift Experiment
 
-Prompts:  
+I changed the ranking to energy-focused mode: energy increased from 1.5 to 3 points while genre and mood became 1 point each. `Gym Hero` passed `Static Hearts` for the rock profile even though it is pop, and `Static Hearts` narrowly passed `Electric Bloom` for the conflicted profile. The change increased cross-genre similarity but weakened categorical intent. It made the output different, not consistently more accurate, so balanced mode remains the default.
 
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
+The automated suite contains 14 tests for loading, scoring, explanations, modes, sorting, error handling, and API behavior. All tests pass.
 
----
+## 8. Ideas for Improvement
 
-## 7. Evaluation  
+1. Gather likes, skips, replays, and explicit ratings so each listener's weights can adapt over time.
+2. Expand and rebalance the catalog, allow multiple mood tags, and represent related terms with embeddings instead of exact text matches.
+3. Add a diversity reranker that limits repeated artists or genres and occasionally explores outside the user's existing profile.
 
-How you checked whether the recommender behaved as expected. 
+## 9. Personal Reflection
 
-Prompts:  
+My biggest learning moment was realizing that the feature choices are the model. The final sorting step is simple; the difficult part is deciding how a human idea such as a musical vibe becomes fields and weights. Explanations made it clear when a result succeeded for the intended reason and when it only benefited from energy.
 
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
-
-No need for numeric metrics unless you created some.
-
----
-
-## 8. Future Work  
-
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
-
----
-
-## 9. Personal Reflection  
-
-A few sentences about your experience.  
-
-Prompts:  
-
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+AI helped me turn the requirements into modules, brainstorm an adversarial profile, and draft code and tests. I had to double-check its work by recomputing expected scores, running the CLI, and comparing every documentation claim to real output. Simple weighted rules still felt surprisingly personal when several features lined up. If I continued, I would learn preferences from feedback and deliberately balance relevance with discovery.
